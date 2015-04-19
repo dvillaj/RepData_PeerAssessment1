@@ -95,6 +95,25 @@ plot1
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
+The mean is **10766.19** and the median is **10765**
+
+
+```r
+mean(s1$day_steps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
+median(s1$day_steps)
+```
+
+```
+## [1] 10765
+```
+
 ## What is the average daily activity pattern?
 
 To discover what's the average daily activity pattern let's do:
@@ -142,7 +161,7 @@ summary(s2)
 ##  Max.   :2355.0   Max.   :206.170
 ```
 
-2. Find out which interval contains the maximum steps ...
+2. Find out which interval contains the maximum number of steps ...
 
 
 ```r
@@ -183,7 +202,9 @@ ggplot(s2, aes(x=interval, y=day_steps)) +
         geom_text(aes(x=max_interval + 300, y=190, label= label_steps), colour="red", size=4)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
+
+The maximum number of steps is **208** which corresponds the the **835th** interval
 
 ## Imputing missing values
 
@@ -200,11 +221,11 @@ table(is.na(data$steps))
 ## 15264  2304
 ```
 
-There are 2.304 NA values in the dataset
+There are **2304** NA values in the dataset
 
-My strategy for filling in the NA values will be fill with the mean value of all steps in the same interval.  
+The strategy for filling in the NA values will be fill with the mean value of all steps in the same interval.  To code this strategy let's do the following steps:
 
-First let's split the dataset into two diferents data frames, one with NA values and the other wihtout them.  
+* First let's split the dataset into two diferents data frames, one with NA values and the other wihtout them.  
 
 
 ```r
@@ -212,7 +233,7 @@ fullData <- data[!is.na(data$steps),]
 emptyData <- data[is.na(data$steps),]
 ```
 
-Calculate the mean steps in each interval
+* Calculate the mean steps in each interval
 
 
 
@@ -222,7 +243,7 @@ m <- fullData %>%
         summarise(mean_steps = as.integer(mean(steps)))
 ```
 
-Fill in all the values of the empty data frame.
+* Fill in all the values of the empty data frame.
 
 
 ```r
@@ -238,7 +259,7 @@ for (row in 1:nrow(emptyData)){
 }
 ```
 
-The last operation will be bind the two data frames (empty and full) into one named allData
+* The last operation will be bind the two data frames (empty and full) into one named allData
 
 
 ```r
@@ -258,7 +279,7 @@ summary(allData)
 ##                   (Other)   :15840
 ```
 
-and draw an histogram plot with the two data frames at the same time
+* Draw an histogram plot with the two data frames at the same time
 
 
 ```r
@@ -280,9 +301,9 @@ plot3 <- ggplot(s3, aes(x=day_steps)) +
 grid.arrange(plot1, plot3, ncol = 2, main = "Do differ the estimates when fill in missing data?")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-15-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-16-1.png) 
 
-We can see that the median and the mean are almost equal for the two datasets, so when we use NA values **don't differ** from the estimates from the first part of the assignment
+* We can see that the median and the mean are almost equal for the two datasets, so when we use NA values **don't differ** from the estimates from the first part of the assignment
 
 
 ```r
@@ -376,6 +397,6 @@ qplot(interval, day_steps, data = s4, color =day_type, geom = "line",
         labs(title = "Weekday vs Weekend pattern activity")	
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-21-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-22-1.png) 
 
 It looks like this person has a walking weekday pattern different from weekends.
